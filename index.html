@@ -1,42 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<title>Shop của tôi</title>
+<meta charset="UTF-8">
+<title>Shopee Mini</title>
+
 <style>
+
 body{
-font-family: Arial;
+font-family:Arial;
+margin:0;
+background:#f5f5f5;
+}
+
+header{
+background:#ee4d2d;
+color:white;
+padding:15px;
+font-size:24px;
 text-align:center;
 }
-.product{
-border:1px solid #ddd;
-padding:20px;
+
+.search{
+text-align:center;
 margin:20px;
-display:inline-block;
 }
-button{
-background:green;
-color:white;
+
+input{
 padding:10px;
-border:none;
+width:300px;
 }
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.product{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 0 5px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+.product img{
+width:100%;
+height:150px;
+object-fit:cover;
+}
+
+button{
+background:#ee4d2d;
+color:white;
+border:none;
+padding:10px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.cart{
+position:fixed;
+right:10px;
+top:80px;
+background:white;
+padding:15px;
+width:200px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>Shop Online</h1>
+<header>SHOPEE MINI</header>
 
-<div class="product">
-<h2>Áo thun</h2>
-<p>Giá: 100.000đ</p>
-<button>Mua</button>
+<div class="search">
+<input type="text" id="search" placeholder="Tìm sản phẩm..." onkeyup="searchProduct()">
 </div>
 
-<div class="product">
-<h2>Giày</h2>
-<p>Giá: 500.000đ</p>
-<button>Mua</button>
+<div class="products" id="products"></div>
+
+<div class="cart">
+<h3>🛒 Giỏ hàng</h3>
+<ul id="cart"></ul>
+<p>Tổng: <span id="total">0</span> đ</p>
 </div>
+
+<script>
+
+let productList=[
+
+{name:"Áo thun",price:100000,img:"https://picsum.photos/200?1"},
+{name:"Giày sneaker",price:500000,img:"https://picsum.photos/200?2"},
+{name:"Nón",price:80000,img:"https://picsum.photos/200?3"},
+{name:"Túi xách",price:200000,img:"https://picsum.photos/200?4"},
+{name:"Đồng hồ",price:300000,img:"https://picsum.photos/200?5"}
+
+]
+
+let cart=[]
+let total=0
+
+function renderProducts(list){
+
+let html=""
+
+list.forEach((p,i)=>{
+
+html+=`
+<div class="product">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>${p.price} đ</p>
+<button onclick="addCart(${i})">Thêm vào giỏ</button>
+</div>
+`
+
+})
+
+document.getElementById("products").innerHTML=html
+
+}
+
+function addCart(i){
+
+cart.push(productList[i])
+
+total+=productList[i].price
+
+document.getElementById("cart").innerHTML+=
+`<li>${productList[i].name}</li>`
+
+document.getElementById("total").innerText=total
+
+}
+
+function searchProduct(){
+
+let keyword=document.getElementById("search").value.toLowerCase()
+
+let filtered=productList.filter(p=>p.name.toLowerCase().includes(keyword))
+
+renderProducts(filtered)
+
+}
+
+renderProducts(productList)
+
+</script>
 
 </body>
 </html>
